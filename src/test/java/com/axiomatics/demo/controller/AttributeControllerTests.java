@@ -14,15 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
-import static java.util.Optional.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AttributeController.class)
@@ -46,7 +44,7 @@ public class AttributeControllerTests {
 
         Mockito.when(attributeService.getAttributes()).thenReturn(mockAttributes);
 
-        mockMvc.perform(get("/api/attributes")
+        mockMvc.perform(get("/api/v1/attributes")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -64,7 +62,7 @@ public class AttributeControllerTests {
 
         Mockito.when(attributeService.getDefinitionsByCategory(eq(categoryId))).thenReturn(mockCategoryAttributes);
 
-        mockMvc.perform(get("/api/attributes/category/{id}", categoryId)
+        mockMvc.perform(get("/api/v1/attributes/category/{id}", categoryId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -78,12 +76,11 @@ public class AttributeControllerTests {
         request.setDescription("test-attribute-description");
         request.setCategory("test-category");
 
-        // No need for doNothing(). Just verify later.
 
-        mockMvc.perform(put("/api/attributes")
+        mockMvc.perform(post("/api/v1/attributes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         Mockito.verify(attributeService).saveAttributeDefinition(any(AttributeCreationRequest.class));
 
@@ -108,7 +105,7 @@ public class AttributeControllerTests {
 
         Mockito.when(attributeService.getAllCategories()).thenReturn(mockCategories);
 
-        mockMvc.perform(get("/api/categories")
+        mockMvc.perform(get("/api/v1/categories")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))

@@ -1,5 +1,6 @@
 package com.axiomatics.demo.service;
 
+import com.axiomatics.demo.controller.exceptions.ResourceNotFoundException;
 import com.axiomatics.demo.controller.request.AttributeCreationRequest;
 import com.axiomatics.demo.converters.AttributeMapper;
 import com.axiomatics.demo.model.domain.AttributeCategoryDto;
@@ -91,11 +92,10 @@ public class AttributeService {
 
     // Deletes an attribute definition by its ID
     public void deleteDefinition(Long definitionId) {
-        log.info("Deleting attribute definition with ID: {}", definitionId);
         if (!definitionRepository.existsById(definitionId)) {
-            log.error("Definition not found with ID: {}", definitionId);
-            throw new EntityNotFoundException("Definition not found with ID: " + definitionId);
+            throw new ResourceNotFoundException("Attribute", definitionId);
         }
+
         definitionRepository.deleteById(definitionId);
     }
 

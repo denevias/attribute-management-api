@@ -1,5 +1,6 @@
 package com.axiomatics.demo.service;
 
+import com.axiomatics.demo.controller.exceptions.ResourceNotFoundException;
 import com.axiomatics.demo.controller.request.AttributeCreationRequest;
 import com.axiomatics.demo.model.entity.AttributeCategories;
 import com.axiomatics.demo.model.entity.AttributeDefinition;
@@ -129,7 +130,7 @@ class AttributeServiceTest {
 
         when(definitionRepository.existsById(definitionId)).thenReturn(false);
 
-        assertThrows(EntityNotFoundException.class, () -> attributeService.deleteDefinition(definitionId));
+        assertThrows(ResourceNotFoundException.class, () -> attributeService.deleteDefinition(definitionId));
         verify(definitionRepository, times(1)).existsById(definitionId);
     }
 }

@@ -12,7 +12,7 @@ public class AttributeIntegrationTests extends DemoApplicationTests {
     public void testShouldSuccessfullyGetAttributes() {
         given()
                 .when()
-                .get("/api/attributes")
+                .get("/api/v1/attributes")
                 .then()
                 .contentType(JSON)
                 .statusCode(HttpStatus.OK.value());
